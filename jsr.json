@@ -1,0 +1,14 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@teemukurki/mpd-node-client",
+  "exports": "./src/main.ts",
+  "version": "0.0.1",
+  "license": "MIT",
+  "publish": {
+    "include": [
+      "LICENSE",
+      "src/**/*.ts",
+      "README.md"
+    ]
+  }
+}
