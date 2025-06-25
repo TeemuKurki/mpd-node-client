@@ -1,17 +1,5 @@
 import { Socket } from "node:net";
 
-/**
- * TCPClient interfate
- */
-export interface TCPConnection {
-  sendCommand: (command: string, immediate?: boolean) => Promise<string>;
-  sendBinaryCommand: (
-    command: string,
-    immediate?: boolean,
-  ) => Promise<Uint8Array>;
-  close: () => void;
-}
-
 const concat = (
   a: Uint8Array<ArrayBuffer>,
   b: Uint8Array<ArrayBuffer>,
@@ -25,8 +13,25 @@ const concat = (
 
 /**
  * Node TCP Client for MPD Client
+ * @example Usage
+ * ```ts
+ * import { TCPClient } from "@teemukurki/mpd-node-client";
+ * import { MPDClient } from "@teemukurki/mpd";
+ *
+ * const MPD_HOST = "localhost";
+ * const MPD_PORT = 6600;
+ *
+ * const client = MPDClient.init(
+ *  TCPClient,
+ *  MPD_HOST,
+ *  MPD_PORT,
+ * );
+ *
+ * const status = await client.status();
+ * console.log(status);
+ * ```
  */
-export class TCPClient implements TCPConnection {
+export class TCPClient {
   #connection: Socket;
   /**
    * Creates a new instance of TCP Client
