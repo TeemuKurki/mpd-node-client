@@ -1,5 +1,8 @@
 import { Socket } from "node:net";
 
+/**
+ * TCPClient interfate
+ */
 export interface TCPConnection {
   sendCommand: (command: string, immediate?: boolean) => Promise<string>;
   sendBinaryCommand: (
@@ -20,8 +23,15 @@ const concat = (
   return combined;
 };
 
+/**
+ * Node TCP Client for MPD Client
+ */
 export class TCPClient implements TCPConnection {
   #connection: Socket;
+  /**
+   * Creates a new instance of TCP Client
+   * @param connection
+   */
   constructor(connection: Socket) {
     this.#connection = connection;
   }
@@ -38,10 +48,20 @@ export class TCPClient implements TCPConnection {
     return new TCPClient(socket);
   }
 
+  /**
+   * Close connection
+   */
   close(): void {
     this.#connection.destroy();
   }
 
+  /**
+   * Calls MPD server and waits for response
+   *
+   * @param command MPD command
+   * @param immediate if true, do not wait for response
+   * @returns MPD server response as Uint8Array
+   */
   async sendBinaryCommand(
     command: string,
     immediate?: boolean,
@@ -72,7 +92,13 @@ export class TCPClient implements TCPConnection {
       });
     });
   }
-
+  /**
+   * Calls MPD server and waits for response
+   *
+   * @param command MPD command
+   * @param immediate if true, do not wait for response
+   * @returns MPD server response as string
+   */
   async sendCommand(command: string, immediate?: boolean): Promise<string> {
     const responseBinary = await this.sendBinaryCommand(command, immediate);
     return new TextDecoder().decode(responseBinary);
